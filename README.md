@@ -22,9 +22,12 @@ Model-Based-Inference-of-Synaptic-Plasticity-Rules/
 ├── src/
 │   ├── __init__.py
 │   ├── network.py              # Forward simulation (vectorised einsum version) (IRMAK ERKOL)
-│   └── plasticity_rules.py     # Taylor, MLP, and fly plasticity parameterisations (IRMAK ERKOL)
+│   └── plasticity_rules.py     # Taylor, MLP, and fly plasticity parameterisations (IRMAK ERKOL, UMUT ALPEREN CENGİZ)
 ├── data/                       # Fly1.mat through Fly18.mat (from Zenodo) 
 ├── figures/                    # Generated figures 
+├── circuit_model.py            # Circuit model implementation (UMUT ALPEREN CENGİZ)
+├── data_generation.py          # Data generation for Oja's rule experiment (UMUT ALPEREN CENGİZ)
+├── run_ ojas_recovery.py       # Main script for Oja's rule recovery experiment (UMUT ALPEREN CENGİZ)
 ├── run_behavior.py             # Experiment 2: Behavioural plasticity (IRMAK ERKOL)
 ├── run_fly.py                  # Experiment 3: Real fly data (IRMAK ERKOL)
 ├── run_fig4b.py                # Figure 4B: Fly behaviour rasters (IRMAK ERKOL)
@@ -55,7 +58,7 @@ No additional dependencies required. Works with PyTorch 2.0+ and CUDA 12.
 ### Quick start (run all experiments sequentially)
 ```bash
 mkdir -p figures results
-python run_oja.py
+python run_ojas_recovery.py
 python run_behavior.py
 python run_fly.py
 ```

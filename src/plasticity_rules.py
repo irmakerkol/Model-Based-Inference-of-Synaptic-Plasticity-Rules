@@ -14,22 +14,87 @@ import torch.nn.functional as F
 
 
 class TaylorRule3Var(nn.Module):
-    """Taylor series plasticity rule with 3 variables (x, y, w).
-    Used for Oja's rule recovery (neural activity fitting).
-    27 learnable coefficients.
-    """
+    """Taylor series plasticity rule with 3 variables (x, y, w)."""
     def __init__(self, init_scale=1e-2):
         super().__init__()
         self.coeffs = nn.Parameter(torch.randn(3, 3, 3) * init_scale)
     
-    def forward(self, x, y, w):
-        x_powers = torch.stack([torch.ones_like(x), x, x**2])
-        y_powers = torch.stack([torch.ones_like(y), y, y**2])
-        w_powers = torch.stack([torch.ones_like(w), w, w**2])
-        dW = torch.einsum('abc, aj, bi, cij -> ij', 
-                          self.coeffs, x_powers, y_powers, w_powers)
+    def forward(self, x, y, w, observed_idx=None):
+        
+        if observed_idx is not None:
+            mask = torch.zeros_like(w)
+            mask[:, observed_idx, :] = 1.0
+            w = w * mask
+
+        X = torch.stack([torch.ones_like(x), x, x**2], dim=1)
+        Y = torch.stack([torch.ones_like(y), y, y**2], dim=1)
+        Wp = torch.stack([torch.ones_like(w), w, w**2], dim=1)
+
+        dW = torch.einsum(
+            'abc, kaj, kbi, kcij -> kij',
+            self.coeffs, X, Y, Wp
+        )
+
         return dW
 
+class MLPPlasticityRule(nn.Module):
+    
+ 
+    def __init__(
+        self,
+        hidden_sizes: list[int] = None,
+        activation: str = "tanh",
+        init_scale: float = 1e-2,
+    ):
+        super().__init__()
+ 
+        if hidden_sizes is None:
+            hidden_sizes = [10, 10]
+ 
+        act_map = {"tanh": nn.Tanh, "relu": nn.ReLU, "elu": nn.ELU}
+        if activation not in act_map:
+            raise ValueError(f"activation must be one of {list(act_map)}, got '{activation}'")
+        Act = act_map[activation]
+ 
+
+        in_dim = 3
+        layers = []
+        prev = in_dim
+        for h in hidden_sizes:
+            layers += [nn.Linear(prev, h), Act()]
+            prev = h
+        layers.append(nn.Linear(prev, 1))
+        self.mlp = nn.Sequential(*layers)
+ 
+    
+        with torch.no_grad():
+            self.mlp[-1].weight.mul_(init_scale)
+            self.mlp[-1].bias.mul_(init_scale)
+ 
+    def forward(self, x, y, w, observed_idx=None):
+     
+       
+        if observed_idx is not None:
+            mask = torch.zeros_like(w)
+            mask[:, observed_idx, :] = 1.0
+            w = w * mask
+ 
+        B, n_output, n_input = w.shape
+ 
+        
+        x_exp = x.unsqueeze(1).expand(B, n_output, n_input)   
+        y_exp = y.unsqueeze(2).expand(B, n_output, n_input)   
+ 
+        # ── concatenate into per-synapse feature vector [x, y, w] ───────────
+        features = torch.stack([x_exp, y_exp, w], dim=-1)
+ 
+        # ── flatten synapses, run shared MLP, reshape back ───────────────────
+        flat     = features.view(-1, 3)                        
+        dw_flat  = self.mlp(flat).squeeze(-1)                  
+        dW       = dw_flat.view(B, n_output, n_input)          
+ 
+        return dW
+    
 
 class TaylorRule4Var(nn.Module):
     """Taylor series plasticity rule with 4 variables (x, y, w, r).
@@ -162,11 +227,6 @@ class FlyPlasticityWithoutW(nn.Module):
 
 
 # --- Ground truth rules ---
-
-def ojas_rule(x, y, w):
-    """Oja's rule: dW = outer(y,x) - diag(y^2) @ W"""
-    return torch.outer(y, x) - (y**2).unsqueeze(1) * w
-
 
 def reward_covariance_rule(x, w, r, n_hidden):
     """dW = ones * x * r"""

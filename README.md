@@ -94,6 +94,20 @@ Several implementation details not specified in the paper proved critical for co
 - MLP architecture: leaky ReLU hidden + tanh output, all params init scale 0.01
 - Expected reward initialised to 0 (not 0.5)
 
+## Generative Augmentation (Ertugrul Taparci)
+
+**Step 1: Train the Flow Matching model and generate surrogate data**
+```bash
+python diffusion.py
+```
+This trains the generative model and saves `synthetic_neural_responses.pt`.
+
+**Step 2: Run the augmented experiments**
+```bash
+python main_augmented_experiments.py
+```
+This runs the robustness grid search comparing baseline vs augmented recovery.
+
 ## Citation
 
 If you use this code, please cite the original paper:

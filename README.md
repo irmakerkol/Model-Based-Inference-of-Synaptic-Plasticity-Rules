@@ -27,6 +27,8 @@ Model-Based-Inference-of-Synaptic-Plasticity-Rules/
 ├── figures/                    # Generated figures 
 ├── circuit_model.py            # Circuit model implementation (UMUT ALPEREN CENGİZ)
 ├── data_generation.py          # Data generation for Oja's rule experiment (UMUT ALPEREN CENGİZ)
+├── diffusion.py                # Flow Matching generative model (ERTUGRUL TAPARCI)
+├── main_augmented_experiments.py  # Augmented robustness experiments (ERTUGRUL TAPARCI)
 ├── run_ ojas_recovery.py       # Main script for Oja's rule recovery experiment (UMUT ALPEREN CENGİZ)
 ├── run_behavior.py             # Experiment 2: Behavioural plasticity (IRMAK ERKOL)
 ├── run_fly.py                  # Experiment 3: Real fly data (IRMAK ERKOL)

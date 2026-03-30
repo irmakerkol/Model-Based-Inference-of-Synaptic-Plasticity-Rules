@@ -26,7 +26,6 @@ plasticity/
 │   ├── network.py              # Forward simulation (fast vectorised version) Vectorised einsum optimisation (IRMAK ERKOL)
 │   └── plasticity_rules.py     # Taylor, MLP, and fly plasticity parameterisations (IRMAK ERKOL)
 ├── data/                       # Fly1.mat through Fly18.mat (from Zenodo) 
-├── run_oja.py                  # Experiment 1: Oja's rule recovery (IRMAK ERKOL)
 ├── run_behavior.py             # Experiment 2: Behavioural plasticity (IRMAK ERKOL)
 ├── run_fly.py                  # Experiment 3: Real fly data (IRMAK ERKOL)
 ├── run_fig4b.py                # Figure 4B: Fly behaviour rasters (IRMAK ERKOL)
@@ -36,6 +35,7 @@ plasticity/
 ├── run_tables1_3.py            # Tables 1&3: 46 plasticity rules comparison (IRMAK ERKOL)
 ├── process_fly_data.py         # Raw Zenodo data to .mat converter (IRMAK ERKOL)
 ├── process_fly_data_v2.py      # V2 with variable-length trial support (IRMAK ERKOL)
+├── figures/      
 ```
 
 ## Installation

@@ -3,7 +3,7 @@ PyTorch implementation of "Model-Based Inference of Synaptic Plasticity Rules" (
 
 PyTorch reproduction of [Mehta et al. (NeurIPS 2024)](https://papers.neurips.cc/paper_files/paper/2024/file/571082ea18d30060177dfcaf662ff0e5-Paper-Conference.pdf) for inferring synaptic plasticity rules from neural and behavioural data.
 
-**Original paper:** [GitHub (JAX)](https://github.com/yashsmehta/MetaLearnPlasticity) | [Paper PDF](https://papers.neurips.cc/paper_files/paper/2024/file/571082ea18d30060177dfcaf662ff0e5-Paper-Conference.pdf)
+**Original paper:** [Paper PDF](https://papers.neurips.cc/paper_files/paper/2024/file/571082ea18d30060177dfcaf662ff0e5-Paper-Conference.pdf)
 
 **Authors:** Irmak Erkol, Umut Alperen Cengiz, Ertugrul Taparci
 

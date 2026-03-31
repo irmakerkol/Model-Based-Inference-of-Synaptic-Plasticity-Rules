@@ -121,6 +121,7 @@ If you use this code, please cite the original paper:
   year={2024}
 }
 ```
+<img width="2229" height="1371" alt="figure3" src="https://github.com/user-attachments/assets/48961e3e-b60e-48b1-977c-fd1916893676" />
 
 ## License
 
